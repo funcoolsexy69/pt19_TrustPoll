@@ -44,7 +44,7 @@
         <!-- 1. 주민번호 입력 -->
         <div id="step1" class="step">
             <h3>1. 주민등록번호 입력</h3>
-            <input type="text" id="rrn" placeholder="123456-1234567" maxlength="14">
+            <input type="text" id="rrn" placeholder="1234561234567" maxlength="14">
             <button onclick="step1To2()">다음: 인증</button>
         </div>
         <!-- 2. 생체인증 -->
@@ -82,7 +82,7 @@
                 document.getElementById('step2').classList.remove('hidden');
                 speak('RRN OK. PIN 입력.');
             } else {
-                alert('올바른 주민번호!');
+                alert('주민번호를 다시 입력해주세요!');
             }
         }
         function validatePIN() {
@@ -96,7 +96,7 @@
                 speak('PIN OK. 기호 선택 가자.');
             } else {
                 document.getElementById('bioStatus').innerText = 'PIN 실패 (4자리+ 필요).';
-                alert(`PIN 길이: ${pin.length}. 4자리 이상! 데모: 123456`);
+                alert(`PIN 길이: ${pin.length}. 4자리 이상! 예시: 123456`);
             }
         }
         function simulateOTP() {
