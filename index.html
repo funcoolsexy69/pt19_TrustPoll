@@ -50,7 +50,7 @@
         <!-- 2. 생체인증 -->
         <div id="step2" class="step hidden">
             <h3>2. 생체인증 (PIN 입력)</h3>
-            <input type="password" id="pinInput" placeholder="PIN (4자리+): 데모용 123456" maxlength="20">
+            <input type="password" id="pinInput" placeholder="PIN (4자리+): 예시 123456" maxlength="20">
             <button id="validatePIN" onclick="validatePIN()">PIN 제출</button>
             <p>또는 <button onclick="simulateOTP()">OTP로 대체</button></p>
             <p id="bioStatus"></p>
@@ -70,7 +70,6 @@
         <div id="step4" class="step hidden">
             <h3>4. 제출 완료!</h3>
             <p id="finalResult">투표: <span id="voteNum"></span>번. (서버 시뮬)</p>
-            <button onclick="resetDemo()">다시 데모</button>
         </div>
     </div>
     <script>
