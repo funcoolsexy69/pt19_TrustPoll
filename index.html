@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrustPoll - PIN Input Fix (Preview OK)</title>
+    <title>TrustPoll - 신뢰 여론조사</title>
     <style>
-        :root { --bg: #f8f9fa; --card: white; --accent: #007bff; --text: #333; }
-        body.dark-mode { --bg: #1a1a1a; --card: #2d2d2d; --accent: #4dabf7; --text: #e0e0e0; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 28px; padding: 20px; background: var(--bg); color: var(--text); text-align: center; margin: 0; transition: background 0.3s; }
-        .container { max-width: 600px; margin: auto; }
-        input, button { font-size: 28px; padding: 20px; margin: 15px; width: 90%; border: 2px solid var(--accent); border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        button { background: var(--accent); color: white; cursor: pointer; transition: background 0.3s; }
-        button:hover { background: #0056b3; }
+        :root { --bg: #f8f9fa; --card: white; --accent: #007bff; --text: #333; --shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 24px; padding: 40px 20px; background: var(--bg); color: var(--text); text-align: center; margin: 0; line-height: 1.6; }
+        .container { max-width: 700px; margin: auto; }
+        input, button { font-size: 24px; padding: 18px; margin: 15px; width: 90%; border: 2px solid var(--accent); border-radius: 12px; box-shadow: var(--shadow); }
+        button { background: var(--accent); color: white; cursor: pointer; transition: background 0.3s, transform 0.2s; }
+        button:hover { background: #0056b3; transform: translateY(-2px); }
         button.selected, button.success { background: #28a745; border-color: #28a745; }
         .hidden { display: none; }
-        .option { display: block; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 15px; cursor: pointer; transition: transform 0.2s; width: 80%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 2px solid var(--accent); }
+        .option { display: block; margin: 25px auto; padding: 25px; background: var(--card); border-radius: 15px; cursor: pointer; transition: transform 0.2s; width: 85%; box-shadow: var(--shadow); border: 2px solid var(--accent); line-height: 1.4; }
         .option:hover { transform: scale(1.02); }
-        .logo { font-size: 36px; font-weight: bold; margin-bottom: 10px; color: var(--accent); }
-        #result { font-size: 24px; color: #28a745; margin: 20px 0; }
-        .toggle-dark { position: fixed; top: 20px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text); }
-        .step { margin: 20px 0; padding: 10px; background: var(--card); border-radius: 10px; }
+        .logo { font-size: 48px; font-weight: bold; margin-bottom: 20px; color: var(--accent); }
+        #result { font-size: 22px; color: #28a745; margin: 20px 0; font-weight: bold; }
+        .step { margin: 30px 0; padding: 25px; background: var(--card); border-radius: 15px; box-shadow: var(--shadow); }
         #pinInput { background: #fff; }
+        .mission { font-size: 22px; line-height: 1.8; margin: 30px 0; padding: 30px; background: var(--card); border-radius: 20px; box-shadow: var(--shadow); text-align: left; }
+        .mission h2 { color: var(--accent); text-align: center; font-size: 32px; margin-bottom: 25px; }
+        .mission ul { list-style: none; padding: 0; }
+        .mission li { margin: 20px 0; padding-left: 20px; position: relative; }
+        .mission li::before { content: "🚀"; position: absolute; left: 0; font-size: 20px; }
+        h3 { font-size: 28px; color: var(--accent); margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <button class="toggle-dark" onclick="toggleDark()">🌙</button>
     <div class="container">
         <div class="logo">TrustPoll</div>
+        
+        <!-- 미션 소개 -->
+        <div class="mission">
+            <h2>왜 TrustPoll인가?</h2>
+            <ul>
+                <li>세계 각국에서 부정선거 문제가 만연하여 민주주의의 뿌리를 흔듭니다.</li>
+                <li>특히 한국: 여론조사가 전화로만 이뤄져 신원·국적 확인이 어렵고, 대부분 전화 안 받아 응답률 5% 미만. 신뢰? 제로.</li>
+                <li>주민등록번호 + 생체인증으로 진짜 한국인 목소리만 모아. 노인도 쉽게. 부정? 불가능. 신뢰 여론, 여기서 시작!</li>
+            </ul>
+        </div>
 
         <!-- 1. 주민번호 입력 -->
         <div id="step1" class="step">
@@ -34,16 +47,14 @@
             <input type="text" id="rrn" placeholder="123456-1234567" maxlength="14">
             <button onclick="step1To2()">다음: 인증</button>
         </div>
-
         <!-- 2. 생체인증 -->
         <div id="step2" class="step hidden">
             <h3>2. 생체인증 (PIN 입력)</h3>
             <input type="password" id="pinInput" placeholder="PIN (4자리+): 데모용 123456" maxlength="20">
-            <button onclick="validatePIN()">PIN 제출</button>
+            <button id="validatePIN" onclick="validatePIN()">PIN 제출</button>
             <p>또는 <button onclick="simulateOTP()">OTP로 대체</button></p>
             <p id="bioStatus"></p>
         </div>
-
         <!-- 3. 기호 선택 -->
         <div id="step3" class="step hidden">
             <h3>3. 기호 선택 (1~4번)</h3>
@@ -55,7 +66,6 @@
             <p id="result"></p>
             <button onclick="speakInstructions()">음성 안내</button>
         </div>
-
         <!-- 4. 제출 -->
         <div id="step4" class="step hidden">
             <h3>4. 제출 완료!</h3>
@@ -63,11 +73,9 @@
             <button onclick="resetDemo()">다시 데모</button>
         </div>
     </div>
-
     <script>
         let selected = null;
         let authPassed = false;
-
         function step1To2() {
             const rrn = document.getElementById('rrn').value.replace(/-/g, '');
             if (rrn.length === 13 && /^\d{13}$/.test(rrn)) {
@@ -78,7 +86,6 @@
                 alert('올바른 주민번호!');
             }
         }
-
         function validatePIN() {
             let pin = document.getElementById('pinInput').value.trim();
             document.getElementById('bioStatus').innerText = 'PIN 검증 중...';
@@ -93,10 +100,9 @@
                 alert(`PIN 길이: ${pin.length}. 4자리 이상! 데모: 123456`);
             }
         }
-
         function simulateOTP() {
             const otp = Math.floor(100000 + Math.random() * 900000);
-            const inputOtp = prompt(`OTP: ${otp}. 입력:`); // OTP는 prompt OK, rare
+            const inputOtp = prompt(`OTP: ${otp}. 입력:`);
             if (inputOtp == otp) {
                 authPassed = true;
                 step2To3();
@@ -105,12 +111,10 @@
                 alert('OTP 실패!');
             }
         }
-
         function step2To3() {
             document.getElementById('step2').classList.add('hidden');
             document.getElementById('step3').classList.remove('hidden');
         }
-
         function selectOption(num) {
             if (!authPassed) return alert('인증 먼저!');
             selected = num;
@@ -119,7 +123,6 @@
             document.getElementById('result').innerText = `${num}번 선택!`;
             speak(`${num}번. 제출 준비.`);
         }
-
         function step3To4() {
             if (!selected) return alert('선택 안 함!');
             document.getElementById('step3').classList.add('hidden');
@@ -128,15 +131,12 @@
             localStorage.setItem('demoVote', selected);
             speak('제출 완료. 한 표 추가.');
         }
-
         function resetDemo() {
             location.reload();
         }
-
         function speakInstructions() {
             speak('1~4번 터치. 선택 후 제출.');
         }
-
         function speak(text) {
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
@@ -144,10 +144,6 @@
                 utterance.rate = 0.8;
                 speechSynthesis.speak(utterance);
             }
-        }
-
-        function toggleDark() {
-            document.body.classList.toggle('dark-mode');
         }
     </script>
 </body>
